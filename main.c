@@ -1,10 +1,11 @@
-#define _GNU_SOURCE
+#include <unistd.h>
 #include <stdio.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <windows.h>
-#include <Mmsystem.h>
 #include <string.h>
+
 char CURRENT_PLAYER_NAME[80];
 char PLAYER_NAMES[10][80];
 char arr[20][20];
@@ -20,6 +21,8 @@ char SC_NEXTSTEP;
 char SC_EXIT = 'E';
 char SC_BOSS = 'B';
 char *SC_LAST_EVENT = "";
+char RATING_FILE[120];
+char LEVEL1_FILE[120];
 
 int POS_X = 1;
 int POS_Y = 2;
@@ -68,13 +71,22 @@ void trim(char * s) {
 
     memmove(s, p, l + 1);
 }
+void set_file_names(){
+    char root_dir[PATH_MAX];
+    getcwd(root_dir, sizeof(root_dir));
+
+
+    sprintf(RATING_FILE, "%s%s", root_dir, "\\Rating");
+    printf(RATING_FILE);
+    sprintf(LEVEL1_FILE, "%s%s", root_dir, "\\level_1");
+}
 
 void read_Rating(){
 
     char line[MAX_LINE_LENGTH] = {0};
 
 
-    FILE *file = fopen("C:\\Users\\efimv\\CLionProjects\\untitled\\Rating", "r");
+    FILE *file = fopen(RATING_FILE, "r");
     rating_line_count = 0;
     int record_count = 0;
     while (fgets(line, MAX_LINE_LENGTH, file))
@@ -192,7 +204,7 @@ void sort_rating_table(char * name, int score){
 }
 
 void save_rating(){
-    FILE *file = fopen("C:\\Users\\efimv\\CLionProjects\\untitled\\Rating", "w");
+    FILE *file = fopen(RATING_FILE, "w");
     for(int i = 0; i < rating_line_count; i++){
         char score[80];
         itoa(PLAYER_SCORES[i], score, 10);
@@ -253,7 +265,7 @@ void run_game() {
     m_atk = 10;
     arm = 5;
 
-    load_level(arr, "C:\\Users\\efimv\\CLionProjects\\untitled\\level_1");
+    load_level(arr, LEVEL1_FILE);
     arr[1][2] = SC_CHAR;
 
 
@@ -374,6 +386,8 @@ void print_main_screen() {
 }
 
 int main() {
+    set_file_names();
     read_Rating();
     print_main_screen();
+
 }
