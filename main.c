@@ -20,9 +20,11 @@ char SC_WALL = 'W';
 char SC_NEXTSTEP;
 char SC_EXIT = 'E';
 char SC_BOSS = 'B';
+char SC_MERCHANT = 'M';
 char *SC_LAST_EVENT = "";
 char RATING_FILE[120];
 char LEVEL1_FILE[120];
+char MERCHANT_GOODS[4];
 
 int POS_X = 1;
 int POS_Y = 2;
@@ -31,6 +33,7 @@ int PLAYER_SCORES[10];
 int IF_EXIT = 0;
 int CHAR_GOLD = 150;
 int CHAR_HP = 200;
+int CHAR_SOURCE = 10;
 int CHAR_MAXHP = 250;
 int chouse;
 int atk = 15;
@@ -112,6 +115,10 @@ void show_Rating(){
     }
 }
 
+void merchant(){
+
+};
+
 void print_game_screen(char map[20][20]) {
     system("cls");
 
@@ -119,6 +126,8 @@ void print_game_screen(char map[20][20]) {
         for (int y = 0; y < 20; y++) {
             if (map[x][y] == SC_CHAR) {
                 printf("%s%c%s", AC_GREEN, SC_CHAR, AC_NORMAL);
+            } else if (map[x][y] == SC_MERCHANT) {
+                printf("%s%c%s", AC_GREEN, SC_MERCHANT, AC_NORMAL);
             } else if (map[x][y] == SC_GOLD) {
                 printf("%s%c%s", AC_YELLOW, SC_GOLD, AC_NORMAL);
             } else if (map[x][y] == SC_WALL) {
@@ -236,7 +245,11 @@ void move_char(int delta_X, int delta_Y){
             SC_LAST_EVENT = "You stepped into trap";
         }
         if (SC_NEXTSTEP == SC_SURINGE) {
+            if (CHAR_HP + 100 < CHAR_MAXHP){
             CHAR_HP += 100;
+            } else{
+              CHAR_HP = CHAR_MAXHP;
+            }
             SC_LAST_EVENT = "You picked up a healing suringe";
         }
         if (SC_NEXTSTEP == SC_CHEST) {
@@ -253,6 +266,14 @@ void move_char(int delta_X, int delta_Y){
             CHAR_GOLD += 250;
             CHAR_HP -= 100;
         }
+        if (SC_NEXTSTEP == SC_MERCHANT){
+            system("cls");
+
+            printf("%s", "Welcome stranger. What are you buying? \n");
+            printf("%s", "1 - Syringe. Cost: 50 G \n");
+            printf("%s", "2 - Source potion. Cost: 100 G \n");
+            scanf("%d", &chouse);
+        }
     }
 }
 void run_game() {
@@ -264,6 +285,10 @@ void run_game() {
     atk = 15;
     m_atk = 10;
     arm = 5;
+    MERCHANT_GOODS[0] = 2;
+    MERCHANT_GOODS[1] = 1;
+    MERCHANT_GOODS[2] = 1;
+    MERCHANT_GOODS[3] = 1;
 
     load_level(arr, LEVEL1_FILE);
     arr[1][2] = SC_CHAR;
