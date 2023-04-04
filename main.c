@@ -24,7 +24,7 @@ char SC_MERCHANT = 'M';
 char *SC_LAST_EVENT = "";
 char RATING_FILE[120];
 char LEVEL1_FILE[120];
-char MERCHANT_GOODS[4];
+char MERCHANT_GOODS[2];
 
 int POS_X = 1;
 int POS_Y = 2;
@@ -116,8 +116,24 @@ void show_Rating(){
 }
 
 void merchant(){
+    system("cls");
 
-};
+    printf("%s", "Welcome stranger. What are you buying? \n");
+    printf("%s", "1 - Syringe. Cost: 50 G \n");
+    printf("%s", "2 - Source potion. Cost: 100 G \n");
+    scanf("%d", &chouse);
+    if (chouse == 1){
+        if (CHAR_HP + 100 < CHAR_MAXHP){
+            CHAR_HP += 100;
+        } else{
+            CHAR_HP = CHAR_MAXHP;
+        }
+        SC_LAST_EVENT = "You picked up a healing suringe";
+    }
+    if (chouse == 2){
+
+    }
+}
 
 void print_game_screen(char map[20][20]) {
     system("cls");
@@ -267,12 +283,7 @@ void move_char(int delta_X, int delta_Y){
             CHAR_HP -= 100;
         }
         if (SC_NEXTSTEP == SC_MERCHANT){
-            system("cls");
-
-            printf("%s", "Welcome stranger. What are you buying? \n");
-            printf("%s", "1 - Syringe. Cost: 50 G \n");
-            printf("%s", "2 - Source potion. Cost: 100 G \n");
-            scanf("%d", &chouse);
+            merchant();
         }
     }
 }
@@ -287,8 +298,6 @@ void run_game() {
     arm = 5;
     MERCHANT_GOODS[0] = 2;
     MERCHANT_GOODS[1] = 1;
-    MERCHANT_GOODS[2] = 1;
-    MERCHANT_GOODS[3] = 1;
 
     load_level(arr, LEVEL1_FILE);
     arr[1][2] = SC_CHAR;
